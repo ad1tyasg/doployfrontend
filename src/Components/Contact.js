@@ -1,7 +1,8 @@
-import { motion } from 'framer-motion'
-import { containerVariants } from '../motionVarients/motionvarient'
-import { itemVariants } from '../motionVarients/motionvarient'
-import { useState } from 'react'
+import { motion } from 'framer-motion';
+import { containerVariants } from '../motionVarients/motionvarient';
+import { itemVariants } from '../motionVarients/motionvarient';
+import { useState } from 'react';
+import { BASE_URL } from '../services/helper';
 
 export default function Contact() {
     const [errorMessage, setErrorMessage] = useState("");
@@ -16,30 +17,34 @@ export default function Contact() {
 
     const contactForm = async (e) => {
         e.preventDefault();
-        const { first_name, last_name, email, phone_number, message } = userData
-        const res = await fetch('https://grevoc-backend.onrender.com/contact', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }, body: JSON.stringify({
-                first_name, last_name, email, phone_number, message
-            })
-        })
-        const data = await res.json();
-        if (data === 1) {
-            alert("Thank you for you response")
-        } else {
-            setErrorMessage(data);
-        }
+        const { first_name, last_name, email, phone_number, message } = userData;
+        
+        try {
+            const res = await fetch(`${BASE_URL}/contact`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    first_name, last_name, email, phone_number, message
+                })
+            });
 
+            const data = await res.json();
+            if (data === 1) {
+                alert("Thank you for your response");
+            } else {
+                setErrorMessage(data);
+            }
+        } catch (err) {
+            setErrorMessage("Server error. Please try again later.");
+        }
     }
 
     return (
         <div className=" bg-gray-100 px-4 sm:py-10 lg:px-8 pt-20">
             <motion.div variants={containerVariants} initial="hidden" animate="visible" exit="exit">
-
                 <motion.div className="bg-white shadow-md rounded-lg overflow-hidden lg:mr-20 lg:ml-20 p-4 " variants={itemVariants}>
-
                     <div className="mt-10 text-center">
                         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Contact Us</h2>
                     </div>
@@ -58,7 +63,6 @@ export default function Contact() {
                                         onChange={handleInput}
                                         autoComplete="given-name"
                                         className="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-
                                     />
                                 </div>
                             </div>
@@ -74,7 +78,6 @@ export default function Contact() {
                                         onChange={handleInput}
                                         autoComplete="family-name"
                                         className="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-
                                     />
                                 </div>
                             </div>
@@ -91,7 +94,6 @@ export default function Contact() {
                                         onChange={handleInput}
                                         autoComplete="email"
                                         className="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-
                                     />
                                 </div>
                             </div>
@@ -122,7 +124,6 @@ export default function Contact() {
                                         onChange={handleInput}
                                         autoComplete="tel"
                                         className="block w-full rounded-md border-0 py-2 px-3.5 pl-20 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-
                                     />
                                 </div>
                             </div>
@@ -137,11 +138,9 @@ export default function Contact() {
                                         onChange={handleInput}
                                         rows={4}
                                         className="block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-
                                     />
                                 </div>
                             </div>
-
                         </div>
                         <div className="mt-8">
                             <button
